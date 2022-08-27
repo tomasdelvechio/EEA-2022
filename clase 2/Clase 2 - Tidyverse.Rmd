@@ -10,6 +10,7 @@ output:
     depth: 2
 ---
 
+```{=html}
 <style type="text/css">
 div.main-container {
   max-width: 1600px;
@@ -17,30 +18,30 @@ div.main-container {
   margin-right: auto;
 }
 </style>
+```
+# [Tidyverse](https://www.tidyverse.org/)
 
-# [Tidyverse](https://www.tidyverse.org/)          
-
-Este paquete agrupa una serie de paquetes que tienen una misma lógica en su diseño y por ende funcionan en armonía. Primero vamos a ver algunos de los principales comandos y luego vamos a ver algunos ejemplos de cómo podemos usar las funciones de este paquete. 
+Este paquete agrupa una serie de paquetes que tienen una misma lógica en su diseño y por ende funcionan en armonía. Primero vamos a ver algunos de los principales comandos y luego vamos a ver algunos ejemplos de cómo podemos usar las funciones de este paquete.
 
 Entre ellos principalmente usaremos:
 
-* [__dplyr__](https://dplyr.tidyverse.org/) y [__tidyr__](https://tidyr.tidyverse.org/) para consultar, realizar transformaciones y agregaciones sobre los sets de datos
-* [__lubridate__](https://lubridate.tidyverse.org/) para trabajar con datos tipo fecha
-* [__stringr__](https://stringr.tidyverse.org/) para trabajar con datos tipo string
-* [__ggplot2__](https://ggplot2.tidyverse.org/) para realizar gráficos
+-   [**dplyr**](https://dplyr.tidyverse.org/) y [**tidyr**](https://tidyr.tidyverse.org/) para consultar, realizar transformaciones y agregaciones sobre los sets de datos
+-   [**lubridate**](https://lubridate.tidyverse.org/) para trabajar con datos tipo fecha
+-   [**stringr**](https://stringr.tidyverse.org/) para trabajar con datos tipo string
+-   [**ggplot2**](https://ggplot2.tidyverse.org/) para realizar gráficos
 
-A continuación cargamos la librería a nuestro ambiente. Para ello debe estar previamente instalada en nuestra pc o se instala con ```install.packages()```.
+A continuación cargamos la librería a nuestro ambiente. Para ello debe estar previamente instalada en nuestra pc o se instala con `install.packages()`.
 
 ```{r, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(lubridate) # para trabajar con fechas
 ```
 
-![](tidyverse.png){width=800}
+![](tidyverse.png){width="800"}
 
 Para mostrar el funcionamiento básico de tidyverse retomaremos el ejemplo de la Clase 1, con lo cual volvemos a crear el set de datos del [Indice de salarios](https://www.indec.gob.ar/indec/web/Nivel4-Tema-4-31-61) del INDEC.
 
-``` {r, warning=FALSE}
+```{r, warning=FALSE}
 INDICE  <- c( 394.5, 350.7, 346.3,
               408.4, 360.8, 349.5,
               415.6, 375.3, 353.5 )
@@ -59,27 +60,28 @@ Datos
 
 ## Dplyr
 
-El caracter principal para utilizar este paquete es ```%>%``` , _pipe_ (de tubería).
+El caracter principal para utilizar este paquete es `%>%` , *pipe* (de tubería).
 
-Los ```%>%``` toman el set de datos a su izquierda, y los transforman mediante los comandos a su derecha, en los cuales los elementos de la izquierda están implícitos. En otros términos.
+Los `%>%` toman el set de datos a su izquierda, y los transforman mediante los comandos a su derecha, en los cuales los elementos de la izquierda están implícitos. En otros términos.
 
-$f(x,y)$ es equivalente a $x$ %>% $f(.,y)$ 
+$f(x,y)$ es equivalente a $x$ %\>% $f(.,y)$
 
 Veamos las principales funciones que pueden utilizarse con la lógica de este paquete:
 
 ### Glimpse
 
-Permite ver la estructura de la tabla. Nos muestra: 
+Permite ver la estructura de la tabla. Nos muestra:
 
-* número de filas
-* número de columnas
-* nombre de las columnas
-* tipo de dato de cada columna
-* las primeras observaciones de la tabla
+-   número de filas
+-   número de columnas
+-   nombre de las columnas
+-   tipo de dato de cada columna
+-   las primeras observaciones de la tabla
 
 ```{r}
 glimpse(Datos)
 ```
+
 ```{r}
 Datos %>% 
   glimpse()
@@ -88,7 +90,7 @@ Datos %>%
 ### filter
 
 Permite filtrar la tabla acorde al cumplimiento de condiciones lógicas
- 
+
 ```{r}
 Datos %>% 
   filter(INDICE > 400 , GRUPO == "Privado_Registrado")
@@ -103,21 +105,20 @@ Datos %>%
 
 ### rename
 
-Permite renombrar una columna de la tabla. Funciona de la siguiente manera: 
- ```Data %>% rename( nuevo_nombre = viejo_nombre )``` 
- 
+Permite renombrar una columna de la tabla. Funciona de la siguiente manera: `Data %>% rename( nuevo_nombre = viejo_nombre )`
+
 ```{r}
 Datos %>% 
   rename(Periodo = FECHA)
 ```
 
-Nótese que a diferencia del ejemplo de la función __filter__ donde utilizábamos __==__ para comprobar una condición lógica, en este caso se utiliza sólo un __=__ ya que lo estamos haciendo es _asignar_ un nombre.
+Nótese que a diferencia del ejemplo de la función **filter** donde utilizábamos **==** para comprobar una condición lógica, en este caso se utiliza sólo un **=** ya que lo estamos haciendo es *asignar* un nombre.
 
 ### mutate
 
-Permite agregar una nueva variable a la tabla (especificando el nombre que tomará esta), que puede ser el resultado de operaciones sobre otras variables de la misma tabla.       
+Permite agregar una nueva variable a la tabla (especificando el nombre que tomará esta), que puede ser el resultado de operaciones sobre otras variables de la misma tabla.
 
-> Ojo! En caso de especificar el nombre de una columna existente, el resultado de la operación realizada "sobrescribirá" la información de la columna con dicho nombre. 
+> Ojo! En caso de especificar el nombre de una columna existente, el resultado de la operación realizada "sobrescribirá" la información de la columna con dicho nombre.
 
 ```{r}
 Datos <- Datos %>% 
@@ -129,9 +130,9 @@ Datos
 
 Permite definir una variable, la cual toma un valor particular para cada condición establecida. Los valores asignados deben ser siempre del mismo tipo (numérico, caracter, lógico, etc.).
 
-En caso de no cumplir ninguna de las condiciones establecidas la variable tomara valor __NA__
+En caso de no cumplir ninguna de las condiciones establecidas la variable tomara valor **NA**
 
-La sintaxis de la función es  ```case_when(condicion lógica1 ~ valor asignado1, condicion lógica2 ~ valor asignado2)```.
+La sintaxis de la función es `case_when(condicion lógica1 ~ valor asignado1, condicion lógica2 ~ valor asignado2)`.
 
 ```{r}
 Datos <- Datos %>% 
@@ -139,7 +140,8 @@ Datos <- Datos %>%
                                  GRUPO == "Público"            ~ INDICE * 3))
 Datos
 ```
-Una forma de manejar la asignación de valores faltantes es crear una "condición" que sea igual a TRUE. Esto funciona como la parte de **else** de una estructura condicional y la sintaxis es ```case_when(condicion lógica1 ~ valor asignado1, TRUE ~ valor asignado en caso de no cumplirse la/s condicion/es previas)```.
+
+Una forma de manejar la asignación de valores faltantes es crear una "condición" que sea igual a TRUE. Esto funciona como la parte de **else** de una estructura condicional y la sintaxis es `case_when(condicion lógica1 ~ valor asignado1, TRUE ~ valor asignado en caso de no cumplirse la/s condicion/es previas)`.
 
 ```{r}
 Datos %>% 
@@ -147,7 +149,8 @@ Datos %>%
                                  GRUPO == "Público"            ~ INDICE * 3,
                                  TRUE ~ 1000)) 
 ```
-Como la función `case_when` va recorriendo las condiciones en forma secuencial, si repetimos una condición asingando un nuevo valor, el valor que prevalece será el de la primera. Veamos cómo sería el caso:  
+
+Como la función `case_when` va recorriendo las condiciones en forma secuencial, si repetimos una condición asingando un nuevo valor, el valor que prevalece será el de la primera. Veamos cómo sería el caso:
 
 ```{r}
 Datos %>% 
@@ -160,9 +163,9 @@ Datos %>%
 
 ### select
 
-Permite especificar la serie de columnas que se desea conservar de un DataFrame. También pueden especificarse las columnas que se desean descartar (agregándoles un _-_). Muy útil para agilizar el trabajo en bases de datos de gran tamaño.
+Permite especificar la serie de columnas que se desea conservar de un DataFrame. También pueden especificarse las columnas que se desean descartar (agregándoles un *-*). Muy útil para agilizar el trabajo en bases de datos de gran tamaño.
 
-Así como con la función ```filter()``` se filtran filas de interés, en este caso, la función ```select()``` permite seleccionar columnas de interés, reduciendo la dimensionalidad de la base con la cual trabajar.
+Así como con la función `filter()` se filtran filas de interés, en este caso, la función `select()` permite seleccionar columnas de interés, reduciendo la dimensionalidad de la base con la cual trabajar.
 
 ```{r}
 Datos2 <- Datos %>% 
@@ -175,16 +178,15 @@ Datos <- Datos %>%
 
 ### arrange
 
-Permite ordenar la tabla por los valores de determinada/s variable/s. Es útil cuando luego deben hacerse otras operaciones que requieran del ordenamiento de la tabla. 
+Permite ordenar la tabla por los valores de determinada/s variable/s. Es útil cuando luego deben hacerse otras operaciones que requieran del ordenamiento de la tabla.
 
-Por default ordena en forma ascendente, si queremos que alguna variable quede ordenada en forma descendente hay que usar ```desc()```. 
+Por default ordena en forma ascendente, si queremos que alguna variable quede ordenada en forma descendente hay que usar `desc()`.
 
 ```{r}
 Datos <- Datos %>% 
   arrange(GRUPO, INDICE)
 Datos
 ```
-
 
 ```{r}
 # o en forma descendente
@@ -205,34 +207,33 @@ Datos %>%
 
 ### group_by
 
-Esta función permite realizar operaciones de forma agrupada. Lo que hace la función es "separar" a la tabla según los valores de la variable indicada y realizar las operaciones que se especifican a continuación, de manera independiente para cada una de las "subtablas". 
+Esta función permite realizar operaciones de forma agrupada. Lo que hace la función es "separar" a la tabla según los valores de la variable indicada y realizar las operaciones que se especifican a continuación, de manera independiente para cada una de las "subtablas".
 
-En nuestro ejemplo, sería útil para calcular el promedio de los indices por _Fecha_. 
+En nuestro ejemplo, sería útil para calcular el promedio de los indices por *Fecha*.
 
 ```{r}
 Datos %>% 
   group_by(FECHA) %>%
-  summarise(Indprom = mean(INDICE))
+  summarise(Indprom = mean(INDICE), Indlen2 = length(INDICE))
 ```
 
 ## Joins
 
 Otra implementación muy importante del paquete dplyr son las funciones para unir tablas (joins)
 
-![Fuente: http://rstudio-pubs-static.s3.amazonaws.com/227171_618ebdce0b9d44f3af65700e833593db.html](joins.png){width=500}        
+![Fuente: <http://rstudio-pubs-static.s3.amazonaws.com/227171_618ebdce0b9d44f3af65700e833593db.html>](joins.png){width="500"}
 
 ### left_join
 
-Veamos un ejemplo de la función __left_join__ (una de las más utilizadas en la práctica). Para ello, es necesario tener dos tablas y una columna que será la que servirá para unir ambas. 
+Veamos un ejemplo de la función **left_join** (una de las más utilizadas en la práctica). Para ello, es necesario tener dos tablas y una columna que será la que servirá para unir ambas.
 
-Para ello crearemos previamente un Dataframe que contenga un Ponderador para cada uno de los Grupos del Dataframe _Datos_. Aprovecharemos el ejemplo para introducir la función __weigthed.mean__, y así calcular un Indice Ponderado.
+Para ello crearemos previamente un Dataframe que contenga un Ponderador para cada uno de los Grupos del Dataframe *Datos*. Aprovecharemos el ejemplo para introducir la función **weigthed.mean**, y así calcular un Indice Ponderado.
 
 ```{r}
 # creamos un dataframe de ponderadores con la columna GRUPO igual al dataset original
 Ponderadores <- data.frame(GRUPO = c("Privado_Registrado", "Público", "Privado_No_Registrado"), PONDERADOR = c(50.16,29.91,19.93))
 Ponderadores
 ```
-
 
 ```{r}
 # hacemos el join con el dataframe Datos 
@@ -247,7 +248,7 @@ Datos_Indice_Gral <- Datos_join %>%
 Datos_Indice_Gral
 ```
 
-Para más detalle sobre joins, ver notebook opcional de distintos tipos de [joins](https://eea-uba.github.io/EEA-2021/clase%202/Clase 2. Distintos tipos de Join (OPCIONAL).nb.html).
+Para más detalle sobre joins, ver notebook opcional de distintos tipos de [joins](https://eea-uba.github.io/EEA-2021/clase%202/Clase%202.%20Distintos%20tipos%20de%20Join%20(OPCIONAL).nb.html).
 
 ## Tidyr
 
@@ -255,19 +256,19 @@ El paquete tidyr esta pensado para "emprolijar los datos". Tiene un conjunto de 
 
 En el enfoque de *tidy data*:
 
-1. Cada variable conforma una columna
-2. Cada observación conforma una fila
-3. Cada tipo de unidad observacional conforma una tabla 
+1.  Cada variable conforma una columna
+2.  Cada observación conforma una fila
+3.  Cada tipo de unidad observacional conforma una tabla
 
 Veremos dos funciones muy útiles para trabajar con este enfoque:
 
-__pivot_longer__ (previamente __gather__): es una función que nos permite pasar los datos de forma horizontal a una forma vertical. 
+**pivot_longer** (previamente **gather**): es una función que nos permite pasar los datos de forma horizontal a una forma vertical.
 
-__pivot_wider__ (previamente __spread__): es una función que nos permite pasar los datos de forma vertical a una forma horizontal.
+**pivot_wider** (previamente **spread**): es una función que nos permite pasar los datos de forma vertical a una forma horizontal.
 
-La funcionalidad es similar entre estas dos versiones, aunque __pivot_longer__ y __pivot_wider__ corresponden a un enfoque actualizado de las otras funciones, diseñado para ser más simple de usar y para manejar más casos de uso. Cabe destacar, que __gather__ y __spread__ ya no cuentan con mantenimiento y los autores de la librería recomiendan enfáticamente el uso de las nuevas versiones.
+La funcionalidad es similar entre estas dos versiones, aunque **pivot_longer** y **pivot_wider** corresponden a un enfoque actualizado de las otras funciones, diseñado para ser más simple de usar y para manejar más casos de uso. Cabe destacar, que **gather** y **spread** ya no cuentan con mantenimiento y los autores de la librería recomiendan enfáticamente el uso de las nuevas versiones.
 
-![Fuente: https://fromthebottomoftheheap.net/2019/10/25/pivoting-tidily/](original-dfs-tidy.png){width=500}
+![Fuente: <https://fromthebottomoftheheap.net/2019/10/25/pivoting-tidily/>](original-dfs-tidy.png){width="500"}
 
 En la siguiente tabla (iris) cada observación es una planta con la medición del largo y ancho de su sépalo y pétalo y el tipo de especie a la cual pertenece.
 
@@ -281,7 +282,7 @@ iris <- iris %>%
 iris
 ```
 
-### Pivot_longer (ex gather) 
+### Pivot_longer (ex gather)
 
 Ahora se considera que cada observación es la medición de cada uno de los 4 atributos de la planta para cada una de las plantas, entonces deberíamos "pivotear" la tabla para tener el tipo de medición como una variable.
 
@@ -298,7 +299,7 @@ iris_vertical
 
 ### Pivot_wider (ex spread)
 
-Podemos deshacer el __pivot_longer__ con un __pivot_wider__
+Podemos deshacer el **pivot_longer** con un **pivot_wider**
 
 ```{r}
 iris_horizontal <- iris_vertical %>%
@@ -323,7 +324,7 @@ fecha
 class(fecha)
 ```
 
-Con la función ```dmy_hms()``` podemos convertir este string a una fecha: estamos indicando que el formato de la fecha es día(d), mes(m), año(y), hora(h), minuto(m) y segundo(s).
+Con la función `dmy_hms()` podemos convertir este string a una fecha: estamos indicando que el formato de la fecha es día(d), mes(m), año(y), hora(h), minuto(m) y segundo(s).
 
 ```{r}
 fecha  <- dmy_hms(fecha)
@@ -370,11 +371,11 @@ fecha - (weeks(1) + hours(2))
 
 Basado en la [clase](https://jmbarriola.github.io/ATR-2019/Clase%205/clase5_strings_y_fechas.nb.html) de Milena Dotta y Juan Barriola
 
-Vamos a usar un paquete muy útil para manejar variables de tipo string, es decir, variables de texto, llamado ```stringr()```. Este paquete cuenta con una cheat sheet que pueden consultar siguiendo este [link](http://edrub.in/CheatSheets/cheatSheetStringr.pdf).
+Vamos a usar un paquete muy útil para manejar variables de tipo string, es decir, variables de texto, llamado `stringr()`. Este paquete cuenta con una cheat sheet que pueden consultar siguiendo este [link](http://edrub.in/CheatSheets/cheatSheetStringr.pdf).
 
 ### str_length
 
-Con la función ```str_length()``` podemos ver el largo de un string.
+Con la función `str_length()` podemos ver el largo de un string.
 
 ```{r}
 string1 <- "abcdefghi"
@@ -388,7 +389,7 @@ string2 <- "abcd efghi"
 str_length(string2)
 ```
 
-La función ```str_sub()``` nos permite extraer los caracteres que se encuentran entre determinadas posiciones. Tiene tres argumentos: el **string**, el orden del caracter **a partir** del cual tiene que empezar a extraer y el orden del caracter **hasta** el cual tiene que extraer.
+La función `str_sub()` nos permite extraer los caracteres que se encuentran entre determinadas posiciones. Tiene tres argumentos: el **string**, el orden del caracter **a partir** del cual tiene que empezar a extraer y el orden del caracter **hasta** el cual tiene que extraer.
 
 ```{r}
 #quiero el tercer caracter
@@ -413,7 +414,7 @@ string1
 
 ### Manejo de espacios en blanco
 
-Es frecuente que aparezcan datos mal cargados o con errores de tipeo que tienen espacios donde no debería haberlos. La función ```str_trim()``` permite que nos deshagamos de los espacios en blanco a izquierda, derecha o ambos lados de nuestro string.
+Es frecuente que aparezcan datos mal cargados o con errores de tipeo que tienen espacios donde no debería haberlos. La función `str_trim()` permite que nos deshagamos de los espacios en blanco a izquierda, derecha o ambos lados de nuestro string.
 
 ```{r}
 string3 <- c("  acelga   ", "brocoli   ",  "   choclo")
@@ -421,13 +422,13 @@ string3 <- c("  acelga   ", "brocoli   ",  "   choclo")
 string3
 ```
 
-Quitamos los espacios en blanco a ambos lados con el argumento ```side=‘both’```
+Quitamos los espacios en blanco a ambos lados con el argumento `side=‘both’`
 
 ```{r}
 str_trim(string3, side = 'both')
 ```
 
-Quitamos los espacios en blanco del lado izquierdo con el argumento ```side=‘left’```
+Quitamos los espacios en blanco del lado izquierdo con el argumento `side=‘left’`
 
 ```{r}
 str_trim(string3, "left")
@@ -450,7 +451,7 @@ str_to_title(string4)
 
 ### str_split
 
-La función ```str_split()``` nos permite partir un string de acuerdo a algún separador/patron (pattern) que definamos.
+La función `str_split()` nos permite partir un string de acuerdo a algún separador/patron (pattern) que definamos.
 
 ```{r}
 #quiero separar todas las letras de mi string
@@ -485,7 +486,6 @@ La función base `gsub()` nos permite reemplazar parte del string por otra cosa.
 
 `str_replace` solo reemplaza la primera ocurrencia del patron mientras que `str_replace_all()` reemplaza todas las ocurrencias
 
-
 ```{r}
 string6 <- "todos los manzanos blancos"
 string6
@@ -517,25 +517,25 @@ grepl(pattern = "ñ",x = string7)
 str_detect(pattern = "ñ", string = string7)
 ```
 
-
 ## Ggplot2
 
-`ggplot` tiene su sintaxis propia. La idea central es pensar los gráficos como una sucesión de capas, que se construyen una a la vez.    
+`ggplot` tiene su sintaxis propia. La idea central es pensar los gráficos como una sucesión de capas, que se construyen una a la vez.
 
-- El operador __```+```__ nos permite incorporar nuevas capas al gráfico.
+-   El operador **`+`** nos permite incorporar nuevas capas al gráfico.
 
-- El comando ```ggplot()``` nos permite definir los __datos__ y las __variables__ (x, y, color, forma, etc.). 
+-   El comando `ggplot()` nos permite definir los **datos** y las **variables** (x, y, color, forma, etc.).
 
-- Las sucesivas capas nos permiten definir:
-    - Uno o más tipos de gráficos (de columnas, ```geom_col()```, de línea, ```geom_line()```, de puntos,```geom_point()```, boxplot, ```geom_boxplot()```)
-    - Títulos ```labs()```
-    - Estilo del gráfico ```theme()```
-    - Escalas de los ejes ```scale_y_continuous```,```scale_x_discrete``` 
-    - División en subconjuntos ```facet_wrap()```,```facet_grid()```
+-   Las sucesivas capas nos permiten definir:
 
-`ggplot` tiene __muchos__ comandos, y no tiene sentido saberlos de memoria, es siempre útil reutilizar gráficos viejos y tener a mano el [machete](data-visualization.pdf).
+    -   Uno o más tipos de gráficos (de columnas, `geom_col()`, de línea, `geom_line()`, de puntos,`geom_point()`, boxplot, `geom_boxplot()`)
+    -   Títulos `labs()`
+    -   Estilo del gráfico `theme()`
+    -   Escalas de los ejes `scale_y_continuous`,`scale_x_discrete`
+    -   División en subconjuntos `facet_wrap()`,`facet_grid()`
 
-También hay otros machetes útiles que ofrece RStudio. Pueden descargarlos en el siguiente [link](https://www.rstudio.com/resources/cheatsheets/). 
+`ggplot` tiene **muchos** comandos, y no tiene sentido saberlos de memoria, es siempre útil reutilizar gráficos viejos y tener a mano el [machete](data-visualization.pdf).
+
+También hay otros machetes útiles que ofrece RStudio. Pueden descargarlos en el siguiente [link](https://www.rstudio.com/resources/cheatsheets/).
 
 ```{r}
 # usando el dataset iris anterior
@@ -552,7 +552,7 @@ ggplot(data = iris, aes(x = Petal.Length, Petal.Width, color = Species)) +
 
 ### Capas del Gráfico
 
-Veamos ahora, el "paso a paso" del armado del mismo. 
+Veamos ahora, el "paso a paso" del armado del mismo.
 
 En primera instancia solo defino los ejes. Y en este caso un color particular para cada Especie.
 
@@ -566,14 +566,15 @@ Luego, defino el tipo de gráfico. El *alpha* me permite definir la intensidad/t
 ```{r}
 g <- g +  geom_point(alpha = 0.25)
 g
-```  
-Las siguientes tres capas me permiten respectivamente: 
- 
- - Definir el título del gráfico
- - Quitar la leyenda
- - Abrir el gráfico en tres fragmentos, uno para cada especie
+```
 
-```{r} 
+Las siguientes tres capas me permiten respectivamente:
+
+-   Definir el título del gráfico
+-   Quitar la leyenda
+-   Abrir el gráfico en tres fragmentos, uno para cada especie
+
+```{r}
 g <- g +
   labs(title = "Medidas de los pétalos por especie") +
   theme(legend.position = 'none') +
@@ -585,15 +586,14 @@ g
 
 La librería GGplot tiene a su vez muchas otras librerías que extienden sus potencialidades. Entre nuestras favoritas están:
 
-- [gganimate](https://gganimate.com/): Para hacer gráficos animados.
-- [ggridge](https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html): Para hacer gráficos de densidad faceteados
-- [ggally](https://ggobi.github.io/ggally/): Para hacer varios gráficos juntos.
+-   [gganimate](https://gganimate.com/): Para hacer gráficos animados.
+-   [ggridge](https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html): Para hacer gráficos de densidad faceteados
+-   [ggally](https://ggobi.github.io/ggally/): Para hacer varios gráficos juntos.
 
 ```{r, message=FALSE, warning=FALSE, fig.width=8, fig.height=6, results='hide',fig.keep='all'}
 library(GGally)
 ggpairs(iris,  mapping = aes(color = Species))
 ```
-
 
 ```{r}
 library(ggridges)
@@ -603,18 +603,18 @@ ggplot(iris, aes(x = Sepal.Length, y = Species, fill = Species)) +
 
 Lo útil de hacer gráficos en R, en lugar de por ejemplo excel, es que podemos hacer uso de más dimensiones, por ejemplo:
 
-- Gráficos que necesitan la información a nivel de microdatos. __puntos__,  __boxplots__, __Kernels__, etc.
-- Abrir el mismo gráfico según alguna variable discreta: ```facet_wrap()```
-- Parametrizar otras variables, para aumentar la dimensionalidad del gráficos, a través de:
-    - [__color__](http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf) ```color = ```
-    - __relleno__```fill = ```
-    - __forma__ ```shape = ```
-    - __tamaño__ ```size = ```
-    - __transparencia__ ```alpha = ```
+-   Gráficos que necesitan la información a nivel de microdatos. **puntos**, **boxplots**, **Kernels**, etc.
+-   Abrir el mismo gráfico según alguna variable discreta: `facet_wrap()`
+-   Parametrizar otras variables, para aumentar la dimensionalidad del gráficos, a través de:
+    -   [**color**](http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf) `color =`
+    -   **relleno**`fill =`
+    -   **forma** `shape =`
+    -   **tamaño** `size =`
+    -   **transparencia** `alpha =`
 
 Esto permite tener en el plano gráficos de muchas dimensiones de análisis.
 
-Cuando queremos utilizar estos parámetros para representar una variable, los definimos __dentro del aes()__, ```aes(... color = ingresos)```, cuando queremos simplemente mejorar el diseño, se asignan por fuera, o dentro de cada tipo de gráficos, ```geom_col(color = 'green')```.
+Cuando queremos utilizar estos parámetros para representar una variable, los definimos **dentro del aes()**, `aes(... color = ingresos)`, cuando queremos simplemente mejorar el diseño, se asignan por fuera, o dentro de cada tipo de gráficos, `geom_col(color = 'green')`.
 
 Para ejemplificar el uso de los gráficos se levanta una base de microdatos de Encuesta Permanente de Hogares (EPH) que publica INDEC.
 
@@ -625,9 +625,9 @@ Individual_T122 <- read.table("../Fuentes/usu_individual_T122.txt.txt",
 
 ### Boxplots
 
-Hacemos un procesamiento simple de la base: Sacamos los ingresos iguales a cero y las no respuestas de nivel educativo (datos faltantes).    
+Hacemos un procesamiento simple de la base: Sacamos los ingresos iguales a cero y las no respuestas de nivel educativo (datos faltantes).
 
-Las variables sexo (*CH04*) y nivel educativo (*NIVEL_ED*) están codificadas como números, y el R las entiende como numéricas. Es importante que las variables sean del tipo que conceptualmente les corresponde (el nivel educativo es una variable categórica, no continua), para que el ggplot pueda graficarlo correctamente, por lo que se las convierte con ```as.factor()```. 
+Las variables sexo (*CH04*) y nivel educativo (*NIVEL_ED*) están codificadas como números, y el R las entiende como numéricas. Es importante que las variables sean del tipo que conceptualmente les corresponde (el nivel educativo es una variable categórica, no continua), para que el ggplot pueda graficarlo correctamente, por lo que se las convierte con `as.factor()`.
 
 ```{r}
 ggdata <- Individual_T122 %>%
@@ -638,7 +638,7 @@ ggdata %>%
   head()
 ```
 
-Si queremos hacer un boxplot del ingreso para cada nivel educativo, asignamos esta variable a _x, group y fill_
+Si queremos hacer un boxplot del ingreso para cada nivel educativo, asignamos esta variable a *x, group y fill*
 
 ```{r}
 ggplot(ggdata, aes(x = NIVEL_ED, y = P21, group = NIVEL_ED, fill = NIVEL_ED))+
@@ -646,7 +646,7 @@ ggplot(ggdata, aes(x = NIVEL_ED, y = P21, group = NIVEL_ED, fill = NIVEL_ED))+
   scale_y_continuous(limits = c(0, 50000)) # definimos escala del eje y
 ```
 
-Si queremos agregar la dimensión _sexo_, podemos utilizar el comando ```facet_wrap()```
+Si queremos agregar la dimensión *sexo*, podemos utilizar el comando `facet_wrap()`
 
 ```{r}
 ggplot(ggdata, aes(x = NIVEL_ED, y = P21, group = NIVEL_ED, fill = NIVEL_ED))+
@@ -655,9 +655,9 @@ ggplot(ggdata, aes(x = NIVEL_ED, y = P21, group = NIVEL_ED, fill = NIVEL_ED))+
   facet_wrap(~ CH04, labeller = "label_both") # se abre el gráfico en fragmentos segun sexo
 ```
 
-En este gráfico, el foco de atención sigue puesto en las diferencias de nivel educativo, pero _neutralizamos_ el efecto de la variable sexo.     
+En este gráfico, el foco de atención sigue puesto en las diferencias de nivel educativo, pero *neutralizamos* el efecto de la variable sexo.
 
-Si lo que queremos hacer es poner el foco de atención en las diferencias por sexo, _neutralizamos_ el efecto del nivel educativo, realizando la apertura por nivel educativo.
+Si lo que queremos hacer es poner el foco de atención en las diferencias por sexo, *neutralizamos* el efecto del nivel educativo, realizando la apertura por nivel educativo.
 
 ```{r}
 ggplot(ggdata, aes(x = CH04, y = P21, group = CH04, fill = CH04 )) +

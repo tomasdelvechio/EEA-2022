@@ -9,6 +9,7 @@ output:
     depth: 2
 ---
 
+```{=html}
 <style type="text/css">
 div.main-container {
   max-width: 1600px;
@@ -16,59 +17,108 @@ div.main-container {
   margin-right: auto;
 }
 </style>
-
+```
 # Ejercicios Clase 2
 
 ## Ejercicio 1: Precios y dólar
 
-Realizar un informe de la macroeconomía argentina haciendo análisis exploratorios del Indice de Precios al Consumidor (IPC) y el tipo de cambio oficial entre el dólar y el peso argentino según lo reportado por el medio Ámbito Financiero. 
+Realizar un informe de la macroeconomía argentina haciendo análisis exploratorios del Indice de Precios al Consumidor (IPC) y el tipo de cambio oficial entre el dólar y el peso argentino según lo reportado por el medio Ámbito Financiero.
 
 El IPC es un indice que mide la evolución de una canasta de precios definida por el INDEC. Los datos del IPC a analizar tienen como año base diciembre de 2016, al cual le corresponde el índice 100. Los precios se encuentran con cuatro niveles de apertura:
 
-  * General: Indice de Precios de toda la canasta de bienes y servicios considerada en el análisis
+-   General: Indice de Precios de toda la canasta de bienes y servicios considerada en el análisis
 
-  * Estacional: Bienes y servicios con comportamiento estacional. Por ejemplo: frutas y verduras
+-   Estacional: Bienes y servicios con comportamiento estacional. Por ejemplo: frutas y verduras
 
-  * Regulados: Bienes y servicios cuyos precios están sujetos a regulación o tienen alto componente impositivo. Por ejemplo: electricidad
+-   Regulados: Bienes y servicios cuyos precios están sujetos a regulación o tienen alto componente impositivo. Por ejemplo: electricidad
 
-  * Núcleo: : Resto de los grupos del IPC
-  
-Para más información sobre el IPC pueden visitar la siguiente página del INDEC: https://www.indec.gob.ar/indec/web/Nivel4-Tema-3-5-31
+-   Núcleo: : Resto de los grupos del IPC
+
+Para más información sobre el IPC pueden visitar la siguiente página del INDEC: <https://www.indec.gob.ar/indec/web/Nivel4-Tema-3-5-31>
 
 La base de datos del dolar tiene frecuencia diaria y comienza en junio de 2015. Cuenta con el tipo de cambio de compra y venta del dólar.
 
-En la carpeta __Fuentes__ se encuentran los archivos __dolar_oficial_ambito.csv__ y __ipc-mensual.csv__.
+En la carpeta **Fuentes** se encuentran los archivos **dolar_oficial_ambito.csv** y **ipc-mensual.csv**.
 
 ### Dólar
 
-1. Leer el dataset
-2. Crear la variable cotización_promedio, realizando el promedio entre compra y venta para cada día
-3. Convertir la variable fecha de string a datetime. Crear las variables de año, mes y día 
-4. Graficar la evolución diaria de la cotización promedio
-5. Crear un dataframe con la mediana de la cotización promedio para cada año y mes (esta será la cotización mensual del dólar oficial)
+1.  Leer el dataset
+
+    ```{r}
+    df_dolar <- read.csv("../Fuentes/dolar_oficial_ambito.csv")
+    tibble::glimpse(df_dolar)
+    ```
+
+2.  Crear la variable cotización_promedio, realizando el promedio entre compra y venta para cada día
+
+    ```{r}
+    df_dolar$cotizacion_promedio <- (df_dolar$compra + df_dolar$venta) / 2
+    tibble::glimpse(df_dolar)
+    ```
+
+3.  Convertir la variable fecha de string a datetime. Crear las variables de año, mes y día
+
+    ```{r}
+    library(lubridate)
+
+    df_dolar$fecha <- as.Date(df_dolar$fecha, format = "%d-%m-%Y")
+    range(df_dolar$fecha)
+
+    df_dolar$año <- year(df_dolar$fecha)
+    df_dolar$mes <- month(df_dolar$fecha)
+    df_dolar$dia <- mday(df_dolar$fecha)
+
+    tibble::glimpse(df_dolar)
+    ```
+
+4.  Graficar la evolución diaria de la cotización promedio
+
+    ```{r}
+    library(ggplot2)
+    #library(dplyr)
+
+    p <- ggplot(df_dolar, aes(x=fecha, y=cotizacion_promedio)) +
+      geom_line() + 
+      xlab("Dia de la cotización") +
+      ylab("Cotización promedio") +
+      ggtitle("Cotización promedio del doalr por dia segun Ambito")
+    p
+    ```
+
+5.  Crear un dataframe con la mediana de la cotización promedio para cada año y mes (esta será la cotización mensual del dólar oficial)
+
+    ```{r}
+    library(tidyverse)
+
+    df_medianas <- df_dolar %>%
+      group_by(año, mes) %>%
+      summarise(mediana = median(cotizacion_promedio)) %>%
+      ungroup()
+
+    tibble::glimpse(df_medianas)
+    ```
 
 ### IPC
 
-1. Leer el dataset 
-2. Modificar el dataset para que cumpla con la definición de tidy data: cada variable debe ser una columna (Apertura, Fecha e Indice). *Pista*: piensen si tienen que usar `pivot_longer` o `pivot_wider`
-3. Crear las variables fecha, año, mes y día 
-4. Graficar la evolución del nivel general del IPC
-5. Graficar la evolución de los 4 grupos
+1.  Leer el dataset
+2.  Modificar el dataset para que cumpla con la definición de tidy data: cada variable debe ser una columna (Apertura, Fecha e Indice). *Pista*: piensen si tienen que usar `pivot_longer` o `pivot_wider`
+3.  Crear las variables fecha, año, mes y día
+4.  Graficar la evolución del nivel general del IPC
+5.  Graficar la evolución de los 4 grupos
 
-### IPC y Dolar 
+### IPC y Dolar
 
-1. Realizar un join de ambos conjuntos de datos (dólar mensual e IPC) de manera que queden los meses para los cuáles hay datos de ambas variables 
-2. Crear el indice de evolución del dólar con base en Diciembre de 2016. La fómula de calculo a utilizar es:
-$Indice_t = \frac{cotizacion_t * 100}{cotizacion_{dic2016}}$
-3. Calcular la media, el desvío estándar, la mediana y el rango del indice del dólar y del IPC General para cada uno de los años
-4. Graficar la evolución del indice del dólar y del nivel general del IPC 
-5. Graficar la evolución del indice del dólar y de los 4 grupos de IPC
+1.  Realizar un join de ambos conjuntos de datos (dólar mensual e IPC) de manera que queden los meses para los cuáles hay datos de ambas variables
+2.  Crear el indice de evolución del dólar con base en Diciembre de 2016. La fómula de calculo a utilizar es: $Indice_t = \frac{cotizacion_t * 100}{cotizacion_{dic2016}}$
+3.  Calcular la media, el desvío estándar, la mediana y el rango del indice del dólar y del IPC General para cada uno de los años
+4.  Graficar la evolución del indice del dólar y del nivel general del IPC
+5.  Graficar la evolución del indice del dólar y de los 4 grupos de IPC
 
 ## Ejercicio 2: Trabajo con strings y fechas
 
 Limpiar una base pública de ataques de tiburones para luego poder hacer algunos análisis exploratorios
 
-En la carpeta __Fuentes__ se encuentra el archivo __ataques_tiburones.csv__
+En la carpeta **Fuentes** se encuentra el archivo **ataques_tiburones.csv**
 
 1.a. Leer el dataset
 
@@ -76,7 +126,7 @@ En la carpeta __Fuentes__ se encuentra el archivo __ataques_tiburones.csv__
 
 **Limpieza variable pais**
 
-2. Obtener los valores únicos de la variable *Country* (país). Evaluar que problemas presenta esta variable para normalizarla
+2.  Obtener los valores únicos de la variable *Country* (país). Evaluar que problemas presenta esta variable para normalizarla
 
 3.a. Llevar los nombres a mayúscula
 
@@ -86,41 +136,39 @@ En la carpeta __Fuentes__ se encuentra el archivo __ataques_tiburones.csv__
 
 **Limpieza variable fecha**
 
-4. Revisar la variable *Date* y evaluar qué problemas presenta esta variable para normalizarla
-5. Eliminar la palabra "Reported " (con su espacio en blanco) de la fecha
-6. Convertir la variable fecha de string a datetime. Crear las variables de año, mes y día 
+4.  Revisar la variable *Date* y evaluar qué problemas presenta esta variable para normalizarla
+5.  Eliminar la palabra "Reported" (con su espacio en blanco) de la fecha
+6.  Convertir la variable fecha de string a datetime. Crear las variables de año, mes y día
 
 **Gráficos**
 
-7. Quedarse con los ataques desde el año 1800 en adelante
-8. Crear un dataframe con la cantidad de ataques totales por región desde el 1800 en adelante
-9. Realizar un gráfico de barras para los 20 países con mayor cantidad de ataques
+7.  Quedarse con los ataques desde el año 1800 en adelante
+8.  Crear un dataframe con la cantidad de ataques totales por región desde el 1800 en adelante
+9.  Realizar un gráfico de barras para los 20 países con mayor cantidad de ataques
 10. Realizar un gráfico de la evolución de ataques por año desde 1800
 11. Realizar un gráfico del total de ataques por mes para AUSTRALIA y USA (Estados Unidos) para construir el ciclo anual de ataques en estos países
 
 ## Ejercicio 3: EPH (OPCIONAL)
 
-El Objetivo de estos ejercicios es practicar el uso del $tidyverse$ para la manipulación de los datos, y $ggplot$ para graficar la información. En las consignas, se propone de manera general qué variables se quiere observar. Ustedes deberán levantar y procesar los datos de la Encuesta Permanente de Hogares, y gráficarlos como consideren que mejor se aprecia la relación entre las variables.     
+El Objetivo de estos ejercicios es practicar el uso del $tidyverse$ para la manipulación de los datos, y $ggplot$ para graficar la información. En las consignas, se propone de manera general qué variables se quiere observar. Ustedes deberán levantar y procesar los datos de la Encuesta Permanente de Hogares, y gráficarlos como consideren que mejor se aprecia la relación entre las variables.
 
-Para este punto se utilizará el dataset de __usu_individual_T120.txt__ que se encuentra en la carpeta Fuentes. 
+Para este punto se utilizará el dataset de **usu_individual_T120.txt** que se encuentra en la carpeta Fuentes.
 
-Una __ayuda__ es utilizar el [diseño de registro](../Fuentes/EPH_registro_2_trim_2016.pdf) para codificar las variables
+Una **ayuda** es utilizar el [diseño de registro](../Fuentes/EPH_registro_2_trim_2016.pdf) para codificar las variables
 
-  
-__Ejercicios__
+**Ejercicios**
 
-- Graficar la distribución del ingreso por ocupación principal (p21) según categoría ocupacional (CAT_OCUP). (opcional: utilizar la librería [ggridges](https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html))
+-   Graficar la distribución del ingreso por ocupación principal (p21) según categoría ocupacional (CAT_OCUP). (opcional: utilizar la librería [ggridges](https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html))
 
-- Incorporar en el gráfico anterior la condición de precariedad laboral (PP07H).
+-   Incorporar en el gráfico anterior la condición de precariedad laboral (PP07H).
 
-- Quedarse sólo con los asalariados (CAT_OCUP = 3), y graficar la relación entre ingreso por ocupación principal(p21), precariedad laboral (PP07H) y tamaño del establecimiento(PP04C99).
+-   Quedarse sólo con los asalariados (CAT_OCUP = 3), y graficar la relación entre ingreso por ocupación principal(p21), precariedad laboral (PP07H) y tamaño del establecimiento(PP04C99).
 
-- Quedarse con los Cuentapropistas y asalariados (CAT_OCUP = 2 y 3) y comparar, según la condición de precariedad laboral (PP07H) la distribución del ingreso según sexo (CH04)
+-   Quedarse con los Cuentapropistas y asalariados (CAT_OCUP = 2 y 3) y comparar, según la condición de precariedad laboral (PP07H) la distribución del ingreso según sexo (CH04)
 
-- Incorporar en el gráfico anterior el tamaño del establecimiento(PP04C99)
+-   Incorporar en el gráfico anterior el tamaño del establecimiento(PP04C99)
 
+**yapa:** Si quisieramos modelar la probabilidad de un evento podemos usar una regresión logísitca (en ggplot `stat_smooth(method="glm", method.args=list(family="binomial")`).\
+Utilicen este modelo para hacer un gráfico que eche luz sobre el siguiente fenómeno:
 
-__yapa:__ Si quisieramos modelar la probabilidad de un evento podemos usar una regresión logísitca (en ggplot ```stat_smooth(method="glm", method.args=list(family="binomial")```).     
-Utilicen este modelo para hacer un gráfico que eche luz sobre el siguiente fenómeno: 
-
-- ¿Cómo se distribuye la probabilidad de querer trabajar más horas (PP03G) según el total de horas trabajadas por semana (PP3E_TOT)? ¿Es diferente el modelo según sexo(CH04)?
+-   ¿Cómo se distribuye la probabilidad de querer trabajar más horas (PP03G) según el total de horas trabajadas por semana (PP3E_TOT)? ¿Es diferente el modelo según sexo(CH04)?

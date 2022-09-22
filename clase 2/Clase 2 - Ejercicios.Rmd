@@ -101,17 +101,85 @@ En la carpeta **Fuentes** se encuentran los archivos **dolar_oficial_ambito.csv*
 ### IPC
 
 1.  Leer el dataset
+
+    ```{r}
+    df_ipc <- read.csv("../Fuentes/ipc-mensual.csv")
+    tibble::glimpse(df_ipc)
+    ```
+
 2.  Modificar el dataset para que cumpla con la definición de tidy data: cada variable debe ser una columna (Apertura, Fecha e Indice). *Pista*: piensen si tienen que usar `pivot_longer` o `pivot_wider`
+
+    ```{r}
+    df_ipc_tidy = df_ipc %>%
+      pivot_longer(!Apertura, names_to = "Periodo", values_to = "IPC") %>%
+      arrange(Periodo)
+    ```
+
 3.  Crear las variables fecha, año, mes y día
+
+    ```{r}
+    #df_ipc_tidy$Fecha = parse_date_time(df_ipc_tidy)
+    df_ipc_tidy <- df_ipc_tidy %>%
+      mutate(Fecha = parse_date_time(df_ipc_tidy$Periodo, "my"),
+             año = year(Fecha),
+             mes = month(Fecha))
+    df_ipc_tidy
+    ```
+
 4.  Graficar la evolución del nivel general del IPC
+
+    ```{r}
+    apertura_nivel_general <- df_ipc_tidy %>%
+      filter(Apertura == "Nivel general")
+    #apertura_nivel_general
+    ipcp <- ggplot(apertura_nivel_general, aes(x=Fecha, y=IPC)) +
+      geom_point()+
+      geom_line()
+    ipcp
+    ```
+
 5.  Graficar la evolución de los 4 grupos
+
+    ```{r}
+    ipc_full <- ggplot(df_ipc_tidy, aes(x = Fecha, y = IPC, group = Apertura)) +
+      geom_point()+
+      geom_line(size=1,alpha=0.75)+
+      labs(x="Fecha", y="IPC", title="Evolución del IPC por grupo")
+      #theme_bw()
+      #scale_color_brewer(palette = "Set1")
+    ipc_full
+    ```
 
 ### IPC y Dolar
 
 1.  Realizar un join de ambos conjuntos de datos (dólar mensual e IPC) de manera que queden los meses para los cuáles hay datos de ambas variables
-2.  Crear el indice de evolución del dólar con base en Diciembre de 2016. La fómula de calculo a utilizar es: $Indice_t = \frac{cotizacion_t * 100}{cotizacion_{dic2016}}$
+
+    ```{r}
+    #df_dolar$fecha
+    #df_ipc_tidy$fecha <- as.Date(df_ipc_tidy$fecha)
+    ```
+
+    ```{r}
+    #df_ipc_tidy = rename(df_ipc_tidy, "fecha" = "Fecha")
+    ipc_dolar <- merge(df_dolar, df_ipc_tidy, by="fecha")
+    tibble::glimpse(ipc_dolar)
+    ```
+
+2.  Crear el indice de evolución del dólar con base en Diciembre de 2016. La fórmula de calculo a utilizar es: $Indice_t = \frac{cotizacion_t * 100}{cotizacion_{dic2016}}$
+
+    ```{r}
+
+    cotizacion_mes_base = df_medianas %>%
+      filter(mes==12, año==2016) %>%
+      pull(mediana) # Pull nos permite seleccionar el valor como un número, select lo traería como un dataframe
+
+    ipc_dolar = ipc_dolar %>% mutate(indice_dolar = cotizacion_promedio * 100 / cotizacion_mes_base)
+    ```
+
 3.  Calcular la media, el desvío estándar, la mediana y el rango del indice del dólar y del IPC General para cada uno de los años
+
 4.  Graficar la evolución del indice del dólar y del nivel general del IPC
+
 5.  Graficar la evolución del indice del dólar y de los 4 grupos de IPC
 
 ## Ejercicio 2: Trabajo con strings y fechas
